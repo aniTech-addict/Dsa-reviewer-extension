@@ -1,10 +1,26 @@
 {
-    "name": "Hello World",
-    "description": "version",
-    "version": "1.0.0",
-    "manifest_version": 3, 
-    "action": {
-        "default_popup": "hello.html",
-        "default_icon": "hello_extension.png"
+  "name": "Hello World",
+  "description": "version",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": "images/analyzer.png"
+  },
+  "icons": {
+    "48": "images/analyzer.png",
+    "320": "images/analyzer.png"
+  },
+  "host_permissions": [
+    "https://leetcode.com/problems/*/submissions/*",
+    "https://generativelanguage.googleapis.com/*"
+  ],
+  "content_scripts": [
+    {
+      "js": ["utils/getAnalysisResponse.js", "scripts/content.js"],
+      "matches": ["https://leetcode.com/problems/*"],
+      "run_at": "document_idle"
     }
+
+  ]
 }
