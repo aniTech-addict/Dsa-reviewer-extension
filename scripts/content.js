@@ -47,4 +47,14 @@ function appendAiAnalyzerButton () {
     sibling.parentNode.insertAdjacentElement("afterBegin", aiAnalyzerButton);
 }
 
-
+function getCodeFromBrowser() {
+    const model = monaco.editor.getEditors();
+    try {
+        if (model.length <= 0) {
+            throw new Error("No editor instance found");
+        }    
+    } catch (error) {
+        console.error(error);
+    }    
+    return model[0].getValue();
+}
