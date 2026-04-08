@@ -1,15 +1,14 @@
 {
-  "name": "Hello World",
+  "name": "DSA Analyzer",
   "description": "version",
   "version": "1.0.0",
   "manifest_version": 3,
   "action": {
     "default_popup": "index.html",
-    "default_icon": "images/analyzer.png"
+    "default_icon": "images/icon1.png"
   },
   "icons": {
-    "48": "images/analyzer.png",
-    "320": "images/analyzer.png"
+    "320": "images/icon1.png"
   },
   "permissions": [ 
     "activeTab",
@@ -30,7 +29,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["images/analyzer.png", "scripts/pageBridge.js"],
+      "resources": ["images/icon1.png"],
       "matches": ["https://leetcode.com/*"]
     }
   ],
