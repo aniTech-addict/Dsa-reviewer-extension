@@ -84,39 +84,85 @@ Organize by **Complexity**, **Readability**, **Logic** improvements. Include cod
 
 
 
-const apiKey = "AIzaSyCzI6zetE9yZFwR2hHDiscEj3Tw4ZUx8mo"
 
+const openRouterApiKey = "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"
+const openRouterModel = "minimax/minimax-m2.5:free"
+let isAnalysisInFlight = false;
+
+/**
+ * 
+ * @param {*} code - code to be analyzed
+ * Fetches the analysis from the background script
+ * Checks if an analysis is already in flight to prevent multiple simultaneous requests
+ * @throws Will throw an error if the OpenRouter API key is missing, if the request fails, or if the response is not ok. It also handles rate limiting errors specifically.
+ * @var operRouterApiKey (pre-defined)  - API key for authenticating with the OpenRouter API, which is required to fetch the analysis. It should be set before calling this function.
+ * @var popenRouterModel (pre-defined)  - The specific model to use for analysis when making the API request. It should be set before calling this function.
+ * @returns {string} analysis result from the API in markdown format with sections: Complexity Analysis, Readability, Logic & Implementation Review, Improvements & Suggestions and Summary 
+ */
 const getAnalysis = async (code) => {
-    try {
-        const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + apiKey, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                contents: [{
-                    parts: [{
-                        text: `System Prompt: ${systemPrompt} Code-To-Analyze: ${code}`
-                    }]
-                }]
-            })
-        });
-        
-        const data = await response.json();
-        if (data.candidates && data.candidates[0]) {
-            console.log(data.candidates[0].content.parts[0].text);
-            return data.candidates[0].content.parts[0].text;
-        }
-    } catch (error) {
-        console.error('Error analyzing code:', error);
-        throw error;
+    if (!openRouterApiKey) {
+        throw new Error("OpenRouter API key missing. Set openRouterApiKey first.");
     }
+    console.time("Calling api");
+
+    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${openRouterApiKey}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            model: openRouterModel,
+            messages: [
+                {
+                    role: "user",
+                    content: [
+                        {
+                            "type": "text",
+                            "text":`System Prompt:\n${systemPrompt}\n\nCode-To-Analyze:\n${code}`
+                        }
+                    ]
+                }
+            ],
+            "reasoning" : {"enabled": true}
+            
+        })
+    });
+
+    
+    const data = await response.json();
+    console.timeEnd("Calling api");
+    if (!response.ok) {
+        console.error("OpenRouter API error:", data);
+        const providerCode = data?.error?.code;
+        const status = response.status;
+        if (status === 429 || providerCode === 429) {
+            throw new Error("Rate limited by provider (429). Wait a few seconds and retry.");
+        }
+
+        throw new Error(data?.error?.message || "OpenRouter request failed");
+    }
+
+    const analysis = data?.choices?.[0]?.message?.content;
+    if (!analysis) {
+        console.error("No analysis returned from OpenRouter:", data);
+        return null;
+    }
+
+    console.log("Analysis received from OpenRouter:", analysis);
+
+    return analysis;
 }
 
 function testing () {
     return "Result of test Script";
 }
 
+/** 
+* Executes the script in the Main world, allowing access to the variables of the senderTab.id
+* get reference to monaco editor and retrieves code from editor.
+* @returns {Object}: { ok: boolean, code: string } 
+*/
 function getMonacoCode() {
     const monacoRef = globalThis.monaco;
     if (!monacoRef?.editor?.getEditors) {
@@ -131,7 +177,46 @@ function getMonacoCode() {
     return { ok: true, code: editors[0].getValue() };
 }
 
-const runScript = async (type, sender) => {
+
+const handleResponse = async (type, result, sendResponse) => {
+    let analysis = "";
+    console.log("handleResponse", result);
+    let code = null;
+
+    try {
+        if (type === "getAnalysis") {
+            if (isAnalysisInFlight) {
+                await sendResponse({
+                    type: "analysis",
+                    error: "Analysis already running. Please wait..."
+                });
+                return;
+            }
+
+            code = result?.[0]?.result?.code;
+            if (!code) {
+                await sendResponse({ type: "analysis", error: "No code returned from Monaco" });
+                return;
+            }
+
+            isAnalysisInFlight = true;
+            analysis = await getAnalysis(code);
+            console.log("Analysis:", analysis);
+            await sendResponse({ type: "analysis", data: analysis });
+        }
+
+        console.log("CODE", code);
+        console.log("Tried Handling response")
+    } catch (error) {
+        await sendResponse({ type: "analysis", error: error?.message || "Analysis failed" });
+    } finally {
+        if (type === "getAnalysis") {
+            isAnalysisInFlight = false;
+        }
+    }
+}
+
+const runScript = async (type, sender, sendResponse) => {
     if (!sender?.tab?.id) return;
     let scriptTOExecute = null;
     let world = "ISOLATED";
@@ -139,7 +224,7 @@ const runScript = async (type, sender) => {
     if (type === "test") {
         scriptTOExecute = testing;
     }
-    else if (type === "getCode") {
+    else if (type === "getAnalysis") {
         scriptTOExecute = getMonacoCode;
         world = "MAIN";
     }
@@ -155,14 +240,21 @@ const runScript = async (type, sender) => {
         world
     });
 
-    
+    if (result.length <= 0 ) {
+        console.error("No result returned from script execution");
+        return;
+    }
+
+    await handleResponse(type, result, sendResponse);
     console.log(result);
 };
 
-const handleMessages = (message, sender) => {
-    runScript(message.type, sender).catch((error) => {
+const handleMessages = (message, sender, sendResponse) => {
+    runScript(message.type, sender, sendResponse).catch((error) => {
         console.error("Failed to run test script:", error);
     });
+
+    return true;
 };
 
 chrome.runtime.onMessage.addListener(handleMessages);
