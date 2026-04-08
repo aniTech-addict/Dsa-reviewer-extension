@@ -11,6 +11,10 @@
     "48": "images/analyzer.png",
     "320": "images/analyzer.png"
   },
+  "permissions": [ 
+    "activeTab",
+    "scripting"
+  ],
   "host_permissions": [
     "https://leetcode.com/problems/*/submissions/*",
     "https://generativelanguage.googleapis.com/*"
