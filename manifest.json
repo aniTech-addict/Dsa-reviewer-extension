@@ -15,12 +15,22 @@
     "https://leetcode.com/problems/*/submissions/*",
     "https://generativelanguage.googleapis.com/*"
   ],
+
   "content_scripts": [
     {
-      "js": ["utils/getAnalysisResponse.js", "scripts/content.js"],
+      "js": ["scripts/content.js"],
       "matches": ["https://leetcode.com/problems/*"],
       "run_at": "document_idle"
     }
 
-  ]
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["images/analyzer.png", "scripts/pageBridge.js"],
+      "matches": ["https://leetcode.com/*"]
+    }
+  ],
+  "background": {
+    "service_worker": "workers/getAnalysisResponse.js"
+  }
 }
