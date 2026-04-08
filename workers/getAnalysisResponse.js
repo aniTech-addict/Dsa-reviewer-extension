@@ -113,3 +113,56 @@ const getAnalysis = async (code) => {
     }
 }
 
+function testing () {
+    return "Result of test Script";
+}
+
+function getMonacoCode() {
+    const monacoRef = globalThis.monaco;
+    if (!monacoRef?.editor?.getEditors) {
+        return { ok: false, error: "Monaco is not available on this page yet" };
+    }
+
+    const editors = monacoRef.editor.getEditors();
+    if (!editors || editors.length === 0) {
+        return { ok: false, error: "No Monaco editor instances found" };
+    }
+
+    return { ok: true, code: editors[0].getValue() };
+}
+
+const runScript = async (type, sender) => {
+    if (!sender?.tab?.id) return;
+    let scriptTOExecute = null;
+    let world = "ISOLATED";
+
+    if (type === "test") {
+        scriptTOExecute = testing;
+    }
+    else if (type === "getCode") {
+        scriptTOExecute = getMonacoCode;
+        world = "MAIN";
+    }
+
+    if ( scriptTOExecute === null ) {
+        console.log("Script to execute is null");
+        return;
+    }
+
+    const result = await chrome.scripting.executeScript({
+        target: { tabId: sender.tab.id },
+        func: scriptTOExecute,
+        world
+    });
+
+    
+    console.log(result);
+};
+
+const handleMessages = (message, sender) => {
+    runScript(message.type, sender).catch((error) => {
+        console.error("Failed to run test script:", error);
+    });
+};
+
+chrome.runtime.onMessage.addListener(handleMessages);
