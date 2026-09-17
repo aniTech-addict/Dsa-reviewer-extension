@@ -7,7 +7,7 @@ import { getAnalysis } from '../workers/getAnalysisResponse.js';
 const runAnalysisTest = async () => {
   const __dirname = import.meta.dirname;
   const lineBreak = '\n\n' + '---'*10 + '\n\n'
-  const testResultPath = path.join(__dirname, 'test_results.md');
+  const testResultPath = path.join(__dirname, 'result', 'test_results.md');
   let errors = 0;
   for (const code of sampleCodes) {
     try {
