@@ -1,8 +1,6 @@
 import { DEFAULT_MODEL, MODELS } from '../constants/constants.js';
 import { systemPrompt } from '../prompts/prompts.js';
 import { getUserCode } from '../utils/monacoCode.js';
-const openRouterApiKey = process.env.OPEN_ROUTER_API_KEY;
-const openRouterModel = process.env.OPEN_ROUTER_MODEL;
 let isAnalysisInFlight = false;
 
 /**
