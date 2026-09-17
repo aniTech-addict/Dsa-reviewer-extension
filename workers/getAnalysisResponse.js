@@ -1,4 +1,4 @@
-import { API_KEY, DEFAULT_MODEL, MODELS } from '../constants/constants.js';
+import { DEFAULT_MODEL, MODELS } from '../constants/constants.js';
 import { systemPrompt } from '../prompts/prompts.js';
 import { getUserCode } from '../utils/monacoCode.js';
 const openRouterApiKey = process.env.OPEN_ROUTER_API_KEY;
@@ -16,9 +16,12 @@ let isAnalysisInFlight = false;
  * @returns {string} analysis result from the API in markdown format with sections: Complexity Analysis, Readability, Logic & Implementation Review, Improvements & Suggestions and Summary
  */
 export const getCodeAnalysis = async (code) => {
-  const openRouterApiKey = API_KEY;
+  const { openRouterApiKey } =
+    await chrome.storage.local.get('openRouterApiKey');
   if (!openRouterApiKey) {
-    throw new Error('OpenRouter API key missing. Set API_KEY first.');
+    throw new Error(
+      'OpenRouter API key missing. Save it in the extension popup first.',
+    );
   }
   console.time('Calling api');
 
@@ -126,7 +129,7 @@ const runScript = async (type, sender, sendResponse) => {
   if (!sender?.tab?.id) return;
   let scriptTOExecute = null;
   let world = 'ISOLATED';
-  
+
   if (type === 'test') {
     scriptTOExecute = testing;
   } else if (type === 'getAnalysis') {
@@ -161,7 +164,5 @@ const handleMessages = (message, sender, sendResponse) => {
 
   return true;
 };
-
-
 
 // chrome.runtime.onMessage.addListener(handleMessages);
