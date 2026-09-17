@@ -67,7 +67,7 @@ function createAiAnalyzerButton() {
     'inline-flex items-center justify-center gap-2 text-sm font-medium px-3.5 py-1 bg-pink rounded-sd-md opacity-80 h';
   aiAnalyzerButton.style.cursor = 'pointer';
   const analyzerIcon = document.createElement('img');
-  analyzerIcon.src = chrome.runtime.getURL('images/icon1.png');
+  analyzerIcon.src = chrome.runtime.getURL('images/DSA_action_icon.png');
   analyzerIcon.alt = 'Analyzer';
   analyzerIcon.style.width = '16px';
   analyzerIcon.style.height = '16px';
