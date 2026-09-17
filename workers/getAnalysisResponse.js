@@ -1,8 +1,6 @@
-import dotenv from 'dotenv';
 import { API_KEY, DEFAULT_MODEL, MODELS } from '../constants/constants.js';
 import { systemPrompt } from '../prompts/prompts.js';
-dotenv.config();
-
+import { getUserCode } from '../utils/monacoCode.js';
 const openRouterApiKey = process.env.OPEN_ROUTER_API_KEY;
 const openRouterModel = process.env.OPEN_ROUTER_MODEL;
 let isAnalysisInFlight = false;
@@ -17,10 +15,10 @@ let isAnalysisInFlight = false;
  * @var popenRouterModel (pre-defined)  - The specific model to use for analysis when making the API request. It should be set before calling this function.
  * @returns {string} analysis result from the API in markdown format with sections: Complexity Analysis, Readability, Logic & Implementation Review, Improvements & Suggestions and Summary
  */
-export const getAnalysis = async (code) => {
+export const getCodeAnalysis = async (code) => {
   const openRouterApiKey = API_KEY;
   if (!openRouterApiKey) {
-    throw new Error('OpenRouter API key missing. Set openRouterApiKey first.');
+    throw new Error('OpenRouter API key missing. Set API_KEY first.');
   }
   console.time('Calling api');
 
@@ -80,28 +78,9 @@ function testing() {
   return 'Result of test Script';
 }
 
-/**
- * Executes the script in the Main world, allowing access to the variables of the senderTab.id
- * get reference to monaco editor and retrieves code from editor.
- * @returns {Object}: { ok: boolean, code: string }
- */
-function getMonacoCode() {
-  const monacoRef = globalThis.monaco;
-  if (!monacoRef?.editor?.getEditors) {
-    return { ok: false, error: 'Monaco is not available on this page yet' };
-  }
-
-  const editors = monacoRef.editor.getEditors();
-  if (!editors || editors.length === 0) {
-    return { ok: false, error: 'No Monaco editor instances found' };
-  }
-
-  return { ok: true, code: editors[0].getValue() };
-}
-
-const handleResponse = async (type, result, sendResponse) => {
+const handleModelResponse = async (type, result, sendResponse) => {
   let analysis = '';
-  console.log('handleResponse', result);
+  console.log('handleModelResponse', result);
   let code = null;
 
   try {
@@ -124,7 +103,7 @@ const handleResponse = async (type, result, sendResponse) => {
       }
 
       isAnalysisInFlight = true;
-      analysis = await getAnalysis(code);
+      analysis = await getCodeAnalysis(code);
       console.log('Analysis:', analysis);
       await sendResponse({ type: 'analysis', data: analysis });
     }
@@ -147,11 +126,11 @@ const runScript = async (type, sender, sendResponse) => {
   if (!sender?.tab?.id) return;
   let scriptTOExecute = null;
   let world = 'ISOLATED';
-
+  
   if (type === 'test') {
     scriptTOExecute = testing;
   } else if (type === 'getAnalysis') {
-    scriptTOExecute = getMonacoCode;
+    scriptTOExecute = getUserCode();
     world = 'MAIN';
   }
 
@@ -182,5 +161,7 @@ const handleMessages = (message, sender, sendResponse) => {
 
   return true;
 };
+
+
 
 // chrome.runtime.onMessage.addListener(handleMessages);
