@@ -1,19 +1,19 @@
 // first call initializing AI Analyzer button and insertion in DOM
 // appendAiAnalyzerButton();
 
-/** 
-*Gets the sibling node:
-*Sibling Node: node adjacent to which the insertion of Ai Button is supposed to happen
-*Identified using the selectively used background color and unique textContent(Solution) 
-*/
+/**
+ *Gets the sibling node:
+ *Sibling Node: node adjacent to which the insertion of Ai Button is supposed to happen
+ *Identified using the selectively used background color and unique textContent(Solution)
+ */
 function getSiblingNode() {
-  const buttons = Array.from(document.querySelectorAll("button.bg-green-s"));
+  const buttons = Array.from(document.querySelectorAll('button.bg-green-s'));
   if (buttons.length === 0) {
-    console.info("No Buttons found");
+    console.info('No Buttons found');
     return;
   }
   const solutionButton = buttons.find((button) => {
-    return button.textContent === "Solution";
+    return button.textContent === 'Solution';
   });
   if (!solutionButton) {
     return null;
@@ -34,17 +34,16 @@ async function getAnalysis() {
 
   getAnalysis.isLoading = true;
   try {
-    const review = await chrome.runtime.sendMessage({ type: "getAnalysis" });
+    const review = await chrome.runtime.sendMessage({ type: 'getAnalysis' });
     if (review?.error) {
-      console.warn("Analysis error:", review.error);
+      console.warn('Analysis error:', review.error);
       return;
     }
-    
+
     // Log the analysis result received from the background script
-    console.log("Response received from background script:", review?.data);
-  
+    console.log('Response received from background script:', review?.data);
   } catch (error) {
-    console.warn("Unable to send message to extension:", error);
+    console.warn('Unable to send message to extension:', error);
   } finally {
     getAnalysis.isLoading = false;
   }
@@ -56,25 +55,25 @@ async function getAnalysis() {
   eventListener for click event that handles the call to getAnalysis api
 */
 function createAiAnalyzerButton() {
-  const aiAnalyzerButton = document.createElement("div");
-  aiAnalyzerButton.id = "ai-analyzer-button";
-  
-  // Add click event listener to call GetAnalysis function that send message to worker 
-  aiAnalyzerButton.addEventListener("click", () => {
-      getAnalysis();
+  const aiAnalyzerButton = document.createElement('div');
+  aiAnalyzerButton.id = 'ai-analyzer-button';
+
+  // Add click event listener to call GetAnalysis function that send message to worker
+  aiAnalyzerButton.addEventListener('click', () => {
+    getAnalysis();
   });
 
   aiAnalyzerButton.className =
-    "inline-flex items-center justify-center gap-2 text-sm font-medium px-3.5 py-1 bg-pink rounded-sd-md opacity-80 h";
-  aiAnalyzerButton.style.cursor = "pointer";
-  const analyzerIcon = document.createElement("img");
-  analyzerIcon.src = chrome.runtime.getURL("images/icon1.png");
-  analyzerIcon.alt = "Analyzer";
-  analyzerIcon.style.width = "16px";
-  analyzerIcon.style.height = "16px";
+    'inline-flex items-center justify-center gap-2 text-sm font-medium px-3.5 py-1 bg-pink rounded-sd-md opacity-80 h';
+  aiAnalyzerButton.style.cursor = 'pointer';
+  const analyzerIcon = document.createElement('img');
+  analyzerIcon.src = chrome.runtime.getURL('images/icon1.png');
+  analyzerIcon.alt = 'Analyzer';
+  analyzerIcon.style.width = '16px';
+  analyzerIcon.style.height = '16px';
 
-  const analyzerLabel = document.createElement("span");
-  analyzerLabel.textContent = "Ai Analyzer";
+  const analyzerLabel = document.createElement('span');
+  analyzerLabel.textContent = 'Ai Analyzer';
 
   aiAnalyzerButton.append(analyzerIcon, analyzerLabel);
   return aiAnalyzerButton;
@@ -83,20 +82,20 @@ function createAiAnalyzerButton() {
 /**
  *  Appends the AI Analyzer button to the DOM if it doesn't already exist.
  *  It first checks if the button is already present to avoid duplicates.
- *  Then it finds the sibling node (the "Solution" button) and inserts the AI Analyzer button adjacent to it. 
+ *  Then it finds the sibling node (the "Solution" button) and inserts the AI Analyzer button adjacent to it.
  * @returns none
  */
 function appendAiAnalyzerButton() {
-  if (document.getElementById("ai-analyzer-button")) {
+  if (document.getElementById('ai-analyzer-button')) {
     return;
   }
   const sibling = getSiblingNode();
   if (!sibling) {
-    console.info("No Solution button found, exiting");
+    console.info('No Solution button found, exiting');
     return;
   }
   const aiAnalyzerButton = createAiAnalyzerButton();
-  sibling.parentNode.insertAdjacentElement("afterBegin", aiAnalyzerButton);
+  sibling.parentNode.insertAdjacentElement('afterBegin', aiAnalyzerButton);
 }
 
 /**
