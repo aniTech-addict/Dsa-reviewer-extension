@@ -1,5 +1,24 @@
-<html>
-  <body>
-    <h1>Hello Extension</h1>
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DSA Reviewer</title>
+  <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+
+  <h1 class="title">DSA Reviewer</h1>
+  <p class="description">Review your code with DSA Reviewer</p>
+
+  <form action="">
+    <input type="password" id="api_key" placeholder="Enter your OpenRouter API key" autocomplete="off">
+    <select id="model">
+    </select>
+    <button type="submit" id="review_btn">Save</button>
+  </form>
+  <p id="status" role="status" aria-live="polite"></p>
+
+  <script src="./index.js" type="module"></script>
+</body>
 </html>
