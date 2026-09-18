@@ -10,7 +10,7 @@ let isAnalysisInFlight = false;
  * Checks if an analysis is already in flight to prevent multiple simultaneous requests
  * @throws Will throw an error if the OpenRouter API key is missing, if the request fails, or if the response is not ok. It also handles rate limiting errors specifically.
  * @var operRouterApiKey provided by user and retrived from the chorme.storage using bg script 
- * @var popenRouterModel uses default model unless specified by user
+ * @var popenRouterModel uses default model unless one is stored in chrome.storage
  * @returns {string} analysis result from the API in markdown format with sections: Complexity Analysis, Readability, Logic & Implementation Review, Improvements & Suggestions and Summary
  */
 export const getCodeAnalysis = async (code) => {
@@ -163,4 +163,4 @@ const handleMessages = (message, sender, sendResponse) => {
   return true;
 };
 
-// chrome.runtime.onMessage.addListener(handleMessages);
+chrome.runtime.onMessage.addListener(handleMessages);

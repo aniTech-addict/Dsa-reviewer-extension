@@ -12,11 +12,18 @@ MODELS.forEach((model) => {
   modelSelect.appendChild(option);
 });
 
-chrome.storage.local.get('openRouterApiKey', ({ openRouterApiKey }) => {
+chrome.storage.local.get(
+  ['openRouterApiKey', 'selectedModel'],
+  ({ openRouterApiKey, selectedModel }) => {
   if (openRouterApiKey) {
     apiKeyInput.value = openRouterApiKey;
   }
-});
+
+  if (selectedModel && MODELS.includes(selectedModel)) {
+    modelSelect.value = selectedModel;
+  }
+  },
+);
 
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
