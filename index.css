@@ -1,10 +1,36 @@
 body {
     min-width: 300px;
     min-height: 200px;
+    text-align: center;
+    padding: 20px;
+}
+
+h1 {
+    margin-bottom: 5px;
+}
+
+p {
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+select {
+    max-width: 150px;
+    overflow: hidden;
+}
+
+.input-section {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
     align-items: center;
+    gap: 10px;
 }
 
 button {
@@ -16,7 +42,59 @@ button {
     background-color: rgb(227, 189, 23);
 }
 
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
 button:hover {
-    background-color:rgb(189, 157, 14);
+    background-color: rgb(189, 157, 14);
     cursor: pointer;
+}
+
+.info-container {
+    position: relative;
+    display: inline-block;
+}
+
+.info-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #777;
+    color: white;
+    text-align: center;
+    font-size: 12px;
+    line-height: 16px;
+    cursor: pointer;
+}
+
+.info-icon:hover {
+    transform: rotate(30deg);
+    background-color: yellowgreen
+}
+
+.info-popup {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    bottom: 100%;
+    left: 75%;
+    transform: translateX(-50%);
+    width: 200px;
+    padding: 5px;
+    background-color: #f5e9a4;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.info-container:hover .info-popup {
+    opacity: 1;
+    visibility: visible;
 }

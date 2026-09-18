@@ -5,10 +5,10 @@
   "manifest_version": 3,
   "action": {
     "default_popup": "index.html",
-    "default_icon": "images/icon1.png"
+    "default_icon": "images/icons/icon1.png"
   },
   "icons": {
-    "320": "images/icon1.png"
+    "320": "images/icons/icon1.png"
   },
   "permissions": ["activeTab", "scripting", "storage"],
   "host_permissions": [
@@ -26,11 +26,15 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["images/icon1.png"],
+      "resources": [
+        "images/icons/icon1.png",
+        "images/icons/DSA_action_icon.png"
+      ],
       "matches": ["https://leetcode.com/*"]
     }
   ],
   "background": {
-    "service_worker": "workers/getAnalysisResponse.js"
+    "service_worker": "workers/getAnalysisResponse.js",
+    "type": "module"
   }
 }
