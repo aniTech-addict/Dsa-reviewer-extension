@@ -10,10 +10,11 @@
   "icons": {
     "320": "images/icon1.png"
   },
-  "permissions": ["activeTab", "scripting"],
+  "permissions": ["activeTab", "scripting", "storage"],
   "host_permissions": [
     "https://leetcode.com/problems/*/submissions/*",
-    "https://generativelanguage.googleapis.com/*"
+    "https://generativelanguage.googleapis.com/*",
+    "https://openrouter.ai/*"
   ],
 
   "content_scripts": [

@@ -9,8 +9,8 @@ let isAnalysisInFlight = false;
  * Fetches the analysis from the background script
  * Checks if an analysis is already in flight to prevent multiple simultaneous requests
  * @throws Will throw an error if the OpenRouter API key is missing, if the request fails, or if the response is not ok. It also handles rate limiting errors specifically.
- * @var operRouterApiKey (pre-defined)  - API key for authenticating with the OpenRouter API, which is required to fetch the analysis. It should be set before calling this function.
- * @var popenRouterModel (pre-defined)  - The specific model to use for analysis when making the API request. It should be set before calling this function.
+ * @var operRouterApiKey provided by user and retrived from the chorme.storage using bg script 
+ * @var popenRouterModel uses default model unless specified by user
  * @returns {string} analysis result from the API in markdown format with sections: Complexity Analysis, Readability, Logic & Implementation Review, Improvements & Suggestions and Summary
  */
 export const getCodeAnalysis = async (code) => {
@@ -131,7 +131,7 @@ const runScript = async (type, sender, sendResponse) => {
   if (type === 'test') {
     scriptTOExecute = testing;
   } else if (type === 'getAnalysis') {
-    scriptTOExecute = getUserCode();
+    scriptTOExecute = getUserCode;
     world = 'MAIN';
   }
 
@@ -151,7 +151,7 @@ const runScript = async (type, sender, sendResponse) => {
     return;
   }
 
-  await handleResponse(type, result, sendResponse);
+  await handleModelResponse(type, result, sendResponse);
   console.log(result);
 };
 
