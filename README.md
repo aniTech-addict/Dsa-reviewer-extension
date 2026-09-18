@@ -6,7 +6,7 @@ A Chrome extension that analyzes DSA code from LeetCode submissions using the Op
 
 - Provides complexity analysis, readability feedback, and improvement suggestions.
 - Integrates with LeetCode submission pages.
-- Securely stores your API key using `chrome.storage` (to be implemented).
+- Securely stores your API key using `chrome.storage`.
 
 ## Setup
 

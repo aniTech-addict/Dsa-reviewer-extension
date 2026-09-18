@@ -64,10 +64,10 @@ function createAiAnalyzerButton() {
   });
 
   aiAnalyzerButton.className =
-    'inline-flex items-center justify-center gap-2 text-sm font-medium px-3.5 py-1 bg-pink rounded-sd-md opacity-80 h';
+    'inline-flex items-center justify-center gap-2 text-sm font-medium px-3.5 py-1 bg-yellow rounded-sd-md opacity-80 hover:bg-[#D62143]';
   aiAnalyzerButton.style.cursor = 'pointer';
   const analyzerIcon = document.createElement('img');
-  analyzerIcon.src = chrome.runtime.getURL('images/icons/DSA_action_icon.png');
+  analyzerIcon.src = chrome.runtime.getURL('images/icons/icon1.png');
   analyzerIcon.alt = 'Analyzer';
   analyzerIcon.style.width = '20px';
   analyzerIcon.style.height = '20px';
