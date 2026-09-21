@@ -10,7 +10,7 @@
   "icons": {
     "320": "images/icons/DSA_action_icon.png"
   },
-  "permissions": ["activeTab", "scripting", "storage"],
+  "permissions": ["activeTab", "scripting", "storage", "tabs"],
   "host_permissions": [
     "https://leetcode.com/problems/*/submissions/*",
     "https://generativelanguage.googleapis.com/*",
@@ -20,7 +20,7 @@
   "content_scripts": [
     {
       "js": ["scripts/content.js"],
-      "matches": ["https://leetcode.com/problems/*"],
+      "matches": ["https://leetcode.com/problems/*/submissions/*"],
       "run_at": "document_idle"
     }
   ],
