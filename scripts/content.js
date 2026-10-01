@@ -21,6 +21,10 @@ function getSiblingNode() {
   return solutionButton;
 }
 
+function getCopyToEditorButton () {
+  const copyToEditor = document.querySelector("#cfb273c3-00e3-e5b4-c8e6-78771508ea35 > div > div > div > div.w-full.flex-1.overflow-y-auto > div > div:nth-child(4) > div.flex.flex-col.w-full > div > div.w-full.px-4.py-3 > div > div > div.hidden.cursor-pointer.rounded.border.z-base-1.group-hover\\:block.border-border-quaternary.dark\\:border-border-quaternary.bg-layer-02.dark\\:bg-layer-02")
+  return copyToEditor? copyToEditor : null;
+}
 /**
  * Fetches the analysis from the background script
  * Checks if an analysis is already in flight to prevent multiple simultaneous requests
@@ -59,7 +63,12 @@ function createAiAnalyzerButton() {
   aiAnalyzerButton.id = 'ai-analyzer-button';
 
   // Add click event listener to call GetAnalysis function that send message to worker
+  // Call copyToEditor to get the <Submission> sections editor value to <Code> sections editor, as the <Code> sections editor is where the analysis is done.
   aiAnalyzerButton.addEventListener('click', () => {
+    const copyToEditor = getCopyToEditorButton();
+    if (copyToEditor) {
+      copyToEditor.click();
+    }
     getAnalysis();
   });
 

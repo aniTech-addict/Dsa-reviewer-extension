@@ -13,6 +13,7 @@ export function getUserCode() {
   if (!editors || editors.length === 0) {
     return { ok: false, error: 'No Monaco editor instances found' };
   }
-
+  
+  // always returns the <Code> sections editor value 
   return { ok: true, code: editors[0].getValue() };
 }
