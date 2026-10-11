@@ -16,7 +16,18 @@ A Chrome extension that analyzes DSA code from LeetCode submissions using the Op
 
 ## Testing
 
+### Build
+
+Create a Chrome-loadable build in `dist/`:
+
+```sh
+npm run build
+```
+
+In Chrome, open `chrome://extensions`, enable **Developer mode**, click **Load unpacked**, and select the generated `dist/` directory.
+
 ### Automated Testing
+
 Ensure pwd is Dsa-reviewer-extension.
 Run the test suite using `node test/test_v1.js`.
 Check the test/results/ for test results
@@ -33,3 +44,9 @@ Open Developer Tools (F12) and check the console for logs and results from the b
 ## Usage
 
 Once set up, navigate to a LeetCode submission page. The extension's background script will be able to access the code for analysis when triggered.
+
+## Demo
+
+Watch a quick demonstration of the DSA Analyzer in action:
+
+<video src="assets/dsa_extension.mp4" controls width="100%"></video>
