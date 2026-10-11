@@ -9,7 +9,7 @@ let isAnalysisInFlight = false;
  * Fetches the analysis from the background script
  * Checks if an analysis is already in flight to prevent multiple simultaneous requests
  * @throws Will throw an error if the OpenRouter API key is missing, if the request fails, or if the response is not ok. It also handles rate limiting errors specifically.
- * @var operRouterApiKey provided by user and retrived from the chorme.storage using bg script 
+ * @var operRouterApiKey provided by user and retrived from the chorme.storage using bg script
  * @var popenRouterModel uses default model unless one is stored in chrome.storage
  * @returns {string} analysis result from the API in markdown format with sections: Complexity Analysis, Readability, Logic & Implementation Review, Improvements & Suggestions and Summary
  */
@@ -22,7 +22,8 @@ export const getCodeAnalysis = async (code) => {
     );
   }
   console.time('Calling api');
-
+  const Model =
+    chrome.storage.local.get('selectedModel').selectedModel || DEFAULT_MODEL;
   const response = await fetch(
     'https://openrouter.ai/api/v1/chat/completions',
     {
@@ -32,7 +33,7 @@ export const getCodeAnalysis = async (code) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: DEFAULT_MODEL,
+        model: Model,
         messages: [
           {
             role: 'user',
