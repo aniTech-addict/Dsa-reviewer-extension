@@ -49,4 +49,4 @@ Once set up, navigate to a LeetCode submission page. The extension's background 
 
 Watch a quick demonstration of the DSA Analyzer in action:
 
-<video src="assets/dsa_extension.mp4" controls width="100%"></video>
+[▶️ Watch the DSA Analyzer demo](assets/dsa_extension.mp4)
