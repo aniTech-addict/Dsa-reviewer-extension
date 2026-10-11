@@ -1,5 +1,9 @@
 {
   "type": "module",
+  "scripts": {
+    "build": "node build/build.js",
+    "test": "node test/test_v1.js"
+  },
   "dependencies": {
     "@google/genai": "^1.48.0"
   }

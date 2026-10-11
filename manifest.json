@@ -19,7 +19,7 @@
 
   "content_scripts": [
     {
-      "js": ["scripts/content.js"],
+      "js": ["content_script/content.js"],
       "matches": ["https://leetcode.com/problems/*/submissions/*"],
       "run_at": "document_idle"
     }
