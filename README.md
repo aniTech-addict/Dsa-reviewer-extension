@@ -47,4 +47,4 @@ Once set up, navigate to a LeetCode submission page. The extension's background 
 
 ## Demo
 
-![DSA Analyzer demo](assets/extension_demo.gif)
+![DSA Analyzer demo](assets/dsa_extension.mp4)
