@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch DSA Reviewer Extension",
+            "runtimeExecutable": "stable",
+            "userDataDir": "${workspaceFolder}/.vscode/chrome-debug-profile",
+            "url": "https://leetcode.com/problems/two-sum/",
+            "webRoot": "${workspaceFolder}",
+            "runtimeArgs": [
+                "--disable-extensions-except=${workspaceFolder}",
+                "--load-extension=${workspaceFolder}",
+                "--remote-debugging-port=9222",
+                "--no-first-run",
+                "--no-default-browser-check"
+            ]
+        },
+        {
+            "type": "chrome",
+            "request": "attach",
+            "name": "Attach to DSA Reviewer Chrome",
+            "port": 9222,
+            "url": "https://leetcode.com/*",
+            "webRoot": "${workspaceFolder}"
+        }
+    ]
+}
