@@ -107,15 +107,17 @@ function appendAiAnalyzerButton() {
   sibling.parentNode.insertAdjacentElement('afterBegin', aiAnalyzerButton);
 }
 
-/**
- * Sets up a MutationObserver to monitor changes in the DOM and calls appendAiAnalyzerButton whenever a mutation occurs.
- * This ensures that the AI Analyzer button is added to the page whenever the relevant elements are loaded or updated.
- */
-const observer = new MutationObserver(() => {
-  appendAiAnalyzerButton();
-});
+(async function initNavigation() {
+  const { installNavigationObserver } =
+    await import('../utils/mutationObserver.js');
+  installNavigationObserver();
 
-observer.observe(document.body, {
-  childList: true,
-  subtree: true,
-});
+  window.addEventListener('navigationEvent', (e) => {
+    const { source, url, state, destination } = e.detail;
+    const solutionPageRegex = /.*\/submissions\/\d+/;
+    if (solutionPageRegex.test(destination)) {
+      appendAiAnalyzerButton();
+      console.log('Appending analyzer button');
+    }
+  });
+})();
