@@ -1,0 +1,19 @@
+{
+  "plugins": ["import", "promise", "typescript", "react"],
+  "env": {
+    "builtin": true,
+    "es2026": true,
+    "browser": true
+  },
+  "rules": {
+    "no-unused-vars": "warn",
+    "no-unreachable": "error",
+    "no-constant-condition": "error",
+    "no-undef": "off"
+  },
+  "ignorePatterns": [
+    "dist/**/*",
+    "node_modules/**/*",
+    "build/**/*"
+  ]
+}

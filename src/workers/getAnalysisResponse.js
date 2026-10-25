@@ -24,7 +24,7 @@ export const getCodeAnalysis = async (code) => {
     method: "POST",
     headers: {
       Authorization: `Bearer ${openRouterApiKey}`,
-      "Content-Type": "application/json",
+      "Content-Type": "application/json"
     },
     body: JSON.stringify({
       model: DEFAULT_MODEL,
@@ -34,13 +34,13 @@ export const getCodeAnalysis = async (code) => {
           content: [
             {
               type: "text",
-              text: `System Prompt:\n${systemPrompt}\n\nCode-To-Analyze:\n${code}`,
-            },
-          ],
-        },
+              text: `System Prompt:\n${systemPrompt}\n\nCode-To-Analyze:\n${code}`
+            }
+          ]
+        }
       ],
-      reasoning: { enabled: true },
-    }),
+      reasoning: { enabled: true }
+    })
   });
 
   const data = await response.json();
@@ -81,7 +81,7 @@ const handleModelResponse = async (type, result, sendResponse) => {
       if (isAnalysisInFlight) {
         await sendResponse({
           type: "analysis",
-          error: "Analysis already running. Please wait...",
+          error: "Analysis already running. Please wait..."
         });
         return;
       }
@@ -90,7 +90,7 @@ const handleModelResponse = async (type, result, sendResponse) => {
       if (!code) {
         await sendResponse({
           type: "analysis",
-          error: "No code returned from Monaco",
+          error: "No code returned from Monaco"
         });
         return;
       }
@@ -106,7 +106,7 @@ const handleModelResponse = async (type, result, sendResponse) => {
   } catch (error) {
     await sendResponse({
       type: "analysis",
-      error: error?.message || "Analysis failed",
+      error: error?.message || "Analysis failed"
     });
   } finally {
     if (type === "getAnalysis") {
@@ -135,7 +135,7 @@ const runScript = async (type, sender, sendResponse) => {
   const result = await chrome.scripting.executeScript({
     target: { tabId: sender.tab.id },
     func: scriptTOExecute,
-    world,
+    world
   });
 
   if (result.length <= 0) {

@@ -19,7 +19,7 @@ const runAnalysisTest = async () => {
     }
   }
   console.log(
-    `Success ${sampleCodes.length - errors}\nErrors ${errors}\n\n Check ${testResultPath} for success results`,
+    `Success ${sampleCodes.length - errors}\nErrors ${errors}\n\n Check ${testResultPath} for success results`
   );
 };
 

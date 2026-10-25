@@ -36,9 +36,9 @@ export function installNavigationObserver() {
           url: url || window.location.href,
           state,
           destination,
-          rawArgs,
-        },
-      }),
+          rawArgs
+        }
+      })
     );
   }
 
@@ -52,7 +52,7 @@ export function installNavigationObserver() {
       url: window.location.href,
       state: args[0] || null,
       destination: typeof args[2] === "string" ? args[2] : null,
-      rawArgs: args,
+      rawArgs: args
     });
     return result;
   };
@@ -64,7 +64,7 @@ export function installNavigationObserver() {
       url: window.location.href,
       state: args[0] || null,
       destination: typeof args[2] === "string" ? args[2] : null,
-      rawArgs: args,
+      rawArgs: args
     });
     return result;
   };
@@ -78,7 +78,7 @@ export function installNavigationObserver() {
         url: event.destination.url,
         state: null,
         destination: event.destination.url,
-        rawArgs: [event],
+        rawArgs: [event]
       });
     window.navigation.addEventListener("navigate", onNavigate);
     removals.push(() => window.navigation.removeEventListener("navigate", onNavigate));
@@ -90,7 +90,7 @@ export function installNavigationObserver() {
       url: window.location.href,
       state: event.state || null,
       destination: window.location.href,
-      rawArgs: [event],
+      rawArgs: [event]
     });
   window.addEventListener("popstate", onPopstate);
   removals.push(() => window.removeEventListener("popstate", onPopstate));
@@ -101,7 +101,7 @@ export function installNavigationObserver() {
       url: event.newURL,
       state: null,
       destination: event.newURL,
-      rawArgs: [event],
+      rawArgs: [event]
     });
   window.addEventListener("hashchange", onHashchange);
   removals.push(() => window.removeEventListener("hashchange", onHashchange));

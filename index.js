@@ -22,7 +22,7 @@ chrome.storage.local.get(
     if (selectedModel && MODELS.includes(selectedModel)) {
       modelSelect.value = selectedModel;
     }
-  },
+  }
 );
 
 form.addEventListener("submit", async (event) => {

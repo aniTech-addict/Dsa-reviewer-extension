@@ -23,7 +23,7 @@ function getSiblingNode() {
 
 function getCopyToEditorButton() {
   const copyToEditor = document.querySelector(
-    "#cfb273c3-00e3-e5b4-c8e6-78771508ea35 > div > div > div > div.w-full.flex-1.overflow-y-auto > div > div:nth-child(4) > div.flex.flex-col.w-full > div > div.w-full.px-4.py-3 > div > div > div.hidden.cursor-pointer.rounded.border.z-base-1.group-hover\\:block.border-border-quaternary.dark\\:border-border-quaternary.bg-layer-02.dark\\:bg-layer-02",
+    "#cfb273c3-00e3-e5b4-c8e6-78771508ea35 > div > div > div > div.w-full.flex-1.overflow-y-auto > div > div:nth-child(4) > div.flex.flex-col.w-full > div > div.w-full.px-4.py-3 > div > div > div.hidden.cursor-pointer.rounded.border.z-base-1.group-hover\\:block.border-border-quaternary.dark\\:border-border-quaternary.bg-layer-02.dark\\:bg-layer-02"
   );
   return copyToEditor ? copyToEditor : null;
 }

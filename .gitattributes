@@ -1,0 +1,13 @@
+# Auto-detect text files and normalize line endings to LF on checkout
+* text=auto eol=lf
+
+# Explicit binary files that must not undergo line ending conversions
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.pdf binary
+*.zip binary
+*.tar.gz binary

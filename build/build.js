@@ -15,7 +15,7 @@ const extensionFiles = [
   "prompts",
   "content_script/content.js",
   "utils",
-  "workers",
+  "workers"
 ];
 
 fs.rmSync(outputDirectory, { recursive: true, force: true });

@@ -139,5 +139,5 @@ public:
         return true;
     }
 };
-`,
+`
 ];
