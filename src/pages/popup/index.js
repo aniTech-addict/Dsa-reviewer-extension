@@ -1,4 +1,4 @@
-import { MODELS } from "./constants/constants.js";
+import { MODELS } from "../../constants/constants.js";
 
 const form = document.querySelector("form");
 const apiKeyInput = document.querySelector("#api_key");
