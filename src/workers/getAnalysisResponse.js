@@ -1,6 +1,6 @@
-import { DEFAULT_MODEL, MODELS } from '../constants/constants.js';
-import { systemPrompt } from '../prompts/prompts.js';
-import { getUserCode } from '../utils/monacoCode.js';
+import { DEFAULT_MODEL } from "../constants/constants.js";
+import { systemPrompt } from "../prompts/prompts.js";
+import { getUserCode } from "../utils/monacoCode.js";
 let isAnalysisInFlight = false;
 
 /**
@@ -14,83 +14,74 @@ let isAnalysisInFlight = false;
  * @returns {string} analysis result from the API in markdown format with sections: Complexity Analysis, Readability, Logic & Implementation Review, Improvements & Suggestions and Summary
  */
 export const getCodeAnalysis = async (code) => {
-  const { openRouterApiKey } =
-    await chrome.storage.local.get('openRouterApiKey');
+  const { openRouterApiKey } = await chrome.storage.local.get("openRouterApiKey");
   if (!openRouterApiKey) {
-    throw new Error(
-      'OpenRouter API key missing. Save it in the extension popup first.',
-    );
+    throw new Error("OpenRouter API key missing. Save it in the extension popup first.");
   }
-  console.time('Calling api');
-  const Model =
-    chrome.storage.local.get('selectedModel').selectedModel || DEFAULT_MODEL;
-  const response = await fetch(
-    'https://openrouter.ai/api/v1/chat/completions',
-    {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${openRouterApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: Model,
-        messages: [
-          {
-            role: 'user',
-            content: [
-              {
-                type: 'text',
-                text: `System Prompt:\n${systemPrompt}\n\nCode-To-Analyze:\n${code}`,
-              },
-            ],
-          },
-        ],
-        reasoning: { enabled: true },
-      }),
+  console.time("Calling api");
+
+  const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${openRouterApiKey}`,
+      "Content-Type": "application/json",
     },
-  );
+    body: JSON.stringify({
+      model: DEFAULT_MODEL,
+      messages: [
+        {
+          role: "user",
+          content: [
+            {
+              type: "text",
+              text: `System Prompt:\n${systemPrompt}\n\nCode-To-Analyze:\n${code}`,
+            },
+          ],
+        },
+      ],
+      reasoning: { enabled: true },
+    }),
+  });
 
   const data = await response.json();
-  console.timeEnd('Calling api');
+  console.timeEnd("Calling api");
   if (!response.ok) {
-    console.error('OpenRouter API error:', data);
+    console.error("OpenRouter API error:", data);
     const providerCode = data?.error?.code;
     const status = response.status;
     if (status === 429 || providerCode === 429) {
-      throw new Error(
-        'Rate limited by provider (429). Wait a few seconds and retry.',
-      );
+      throw new Error("Rate limited by provider (429). Wait a few seconds and retry.");
     }
 
-    throw new Error(data?.error?.message || 'OpenRouter request failed');
+    throw new Error(data?.error?.message || "OpenRouter request failed");
   }
 
   const analysis = data?.choices?.[0]?.message?.content;
   if (!analysis) {
-    console.error('No analysis returned from OpenRouter:', data);
+    console.error("No analysis returned from OpenRouter:", data);
     return null;
   }
 
-  console.log('Analysis received from OpenRouter:', analysis);
+  console.log("Analysis received from OpenRouter:", analysis);
 
   return analysis;
 };
 
 function testing() {
-  return 'Result of test Script';
+  return "Result of test Script";
 }
 
 const handleModelResponse = async (type, result, sendResponse) => {
-  let analysis = '';
-  console.log('handleModelResponse', result);
+  let analysis = "";
+  console.log("handleModelResponse", result);
   let code = null;
 
   try {
-    if (type === 'getAnalysis') {
+    if (type === "getAnalysis") {
       if (isAnalysisInFlight) {
         await sendResponse({
-          type: 'analysis',
-          error: 'Analysis already running. Please wait...',
+          type: "analysis",
+          error: "Analysis already running. Please wait...",
         });
         return;
       }
@@ -98,27 +89,27 @@ const handleModelResponse = async (type, result, sendResponse) => {
       code = result?.[0]?.result?.code;
       if (!code) {
         await sendResponse({
-          type: 'analysis',
-          error: 'No code returned from Monaco',
+          type: "analysis",
+          error: "No code returned from Monaco",
         });
         return;
       }
 
       isAnalysisInFlight = true;
       analysis = await getCodeAnalysis(code);
-      console.log('Analysis:', analysis);
-      await sendResponse({ type: 'analysis', data: analysis });
+      console.log("Analysis:", analysis);
+      await sendResponse({ type: "analysis", data: analysis });
     }
 
     // console.log('CODE', code);
     // console.log('Tried Handling response');
   } catch (error) {
     await sendResponse({
-      type: 'analysis',
-      error: error?.message || 'Analysis failed',
+      type: "analysis",
+      error: error?.message || "Analysis failed",
     });
   } finally {
-    if (type === 'getAnalysis') {
+    if (type === "getAnalysis") {
       isAnalysisInFlight = false;
     }
   }
@@ -127,17 +118,17 @@ const handleModelResponse = async (type, result, sendResponse) => {
 const runScript = async (type, sender, sendResponse) => {
   if (!sender?.tab?.id) return;
   let scriptTOExecute = null;
-  let world = 'ISOLATED';
+  let world = "ISOLATED";
 
-  if (type === 'test') {
+  if (type === "test") {
     scriptTOExecute = testing;
-  } else if (type === 'getAnalysis') {
+  } else if (type === "getAnalysis") {
     scriptTOExecute = getUserCode;
-    world = 'MAIN';
+    world = "MAIN";
   }
 
   if (scriptTOExecute === null) {
-    console.log('Script to execute is null');
+    console.log("Script to execute is null");
     return;
   }
 
@@ -148,7 +139,7 @@ const runScript = async (type, sender, sendResponse) => {
   });
 
   if (result.length <= 0) {
-    console.error('No result returned from script execution');
+    console.error("No result returned from script execution");
     return;
   }
 
@@ -158,7 +149,7 @@ const runScript = async (type, sender, sendResponse) => {
 
 const handleMessages = (message, sender, sendResponse) => {
   runScript(message.type, sender, sendResponse).catch((error) => {
-    console.error('Failed to run test script:', error);
+    console.error("Failed to run test script:", error);
   });
 
   return true;

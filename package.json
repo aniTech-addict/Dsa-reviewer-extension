@@ -2,6 +2,7 @@
   "type": "module",
   "dependencies": {
     "@google/genai": "^1.48.0",
+    "eslint": "^10.13.0",
     "prettier": "^3.9.10"
   },
   "devDependencies": {
@@ -27,7 +28,7 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{js,ts,jsx,tsx}": "eslint --fix",
+    "*.{js,ts,jsx,tsx}": "oxfmt --write",
     "*.json": "prettier --write"
   }
 }

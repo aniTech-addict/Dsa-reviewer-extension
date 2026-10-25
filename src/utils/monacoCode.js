@@ -6,13 +6,14 @@
 export function getUserCode() {
   const monacoRef = globalThis.monaco;
   if (!monacoRef?.editor?.getEditors) {
-    return { ok: false, error: 'Monaco is not available on this page yet' };
+    return { ok: false, error: "Monaco is not available on this page yet" };
   }
 
   const editors = monacoRef.editor.getEditors();
   if (!editors || editors.length === 0) {
-    return { ok: false, error: 'No Monaco editor instances found' };
+    return { ok: false, error: "No Monaco editor instances found" };
   }
 
+  // always returns the <Code> sections editor value
   return { ok: true, code: editors[0].getValue() };
 }
