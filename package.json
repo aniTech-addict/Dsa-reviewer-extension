@@ -1,10 +1,33 @@
 {
   "type": "module",
-  "scripts": {
-    "build": "node build/build.js",
-    "test": "node test/test_v1.js"
-  },
   "dependencies": {
-    "@google/genai": "^1.48.0"
+    "@google/genai": "^1.48.0",
+    "prettier": "^3.9.10"
+  },
+  "devDependencies": {
+    "@total-typescript/ts-reset": "^0.6.1",
+    "@types/node": "^26.6.5",
+    "@vitejs/plugin-react-swc": "^4.3.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
+    "oxfmt": "^0.74.0",
+    "oxlint": "^1.89.0",
+    "oxlint-tsgolint": "^7.0.2005",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsx src/pipeline/build.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "format": "oxfmt",
+    "lint": "oxlint . && oxfmt --check \"**/*.{ts,tsx,js,mjs,cjs}\"",
+    "lint:fix": "oxlint . --fix && oxfmt --write \"**/*.{ts,tsx,js,mjs,cjs}\"",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,ts,jsx,tsx}": "eslint --fix",
+    "*.json": "prettier --write"
   }
 }

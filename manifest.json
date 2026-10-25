@@ -12,15 +12,15 @@
   },
   "permissions": ["activeTab", "scripting", "storage", "tabs"],
   "host_permissions": [
-    "https://leetcode.com/problems/*/submissions/*",
+    "https://leetcode.com/*",
     "https://generativelanguage.googleapis.com/*",
     "https://openrouter.ai/*"
   ],
 
   "content_scripts": [
     {
-      "js": ["content_script/content.js"],
-      "matches": ["https://leetcode.com/problems/*/submissions/*"],
+      "js": ["scripts/content.js"],
+      "matches": ["https://leetcode.com/*"],
       "run_at": "document_idle"
     }
   ],
