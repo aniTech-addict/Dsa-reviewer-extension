@@ -48,3 +48,8 @@ Once set up, navigate to a LeetCode submission page. The extension's background 
 ## Demo
 
 (https://www.youtube.com/watch?v=vVKgUXFcBTM)
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+

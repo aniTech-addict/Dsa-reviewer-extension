@@ -1,5 +1,6 @@
 {
   "type": "module",
+  "license": "MIT",
   "scripts": {
     "build": "node build/build.js",
     "test": "node test/test_v1.js"
